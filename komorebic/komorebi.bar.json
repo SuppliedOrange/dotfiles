@@ -48,7 +48,9 @@
         {
             "Date": {
                 "enable": true,
-                "format": "YearMonthDate"
+                "format": {
+                    "Custom": "%a, %b %d"
+                }
             }
         }
     ],
