@@ -1,0 +1,74 @@
+{
+    "$schema": "https://raw.githubusercontent.com/LGUG2Z/komorebi/v0.1.31/schema.json",
+    "app_specific_configuration_path": "$Env:USERPROFILE/applications.json",
+    "window_hiding_behaviour": "Cloak",
+    "cross_monitor_move_behaviour": "Swap",
+    "default_workspace_padding": 20,
+    "default_container_padding": 20,
+    "border": true,
+    "border_width": 0,
+    "border_offset": -18,
+    "transparency": true,
+    "transparency_alpha": 215,
+    "animation": {"enabled":true, "duration":100},
+    "theme": {
+      "palette": "Base16",
+      "name": "Caroline",
+      "unfocused_border": "Base01",
+      "bar_accent": "Base08"
+    },
+    "stackbar": {
+      "height": 40,
+      "mode": "OnStack",
+      "tabs": {
+        "width": 300
+      }
+    },
+    "monitors": [
+      {
+        "workspaces": [
+          {
+            "name": "I",
+            "layout": "BSP"
+          },
+          {
+            "name": "II",
+            "layout": "BSP",
+            "initial_workspace_rules": [{
+                "kind":"Exe",
+                "id": "Brave.exe"
+            }]
+          },
+          {
+            "name": "III",
+            "layout": "BSP",
+            "initial_workspace_rules": [{
+                "kind":"Exe",
+                "id": "Vesktop.exe"
+            }]
+          },
+          {
+            "name": "IV",
+            "layout": "BSP"
+          },
+          {
+            "name": "V",
+            "layout": "BSP"
+          },
+          {
+            "name": "VI",
+            "layout": "BSP"
+          },
+          {
+            "name": "VII",
+            "layout": "BSP"
+          },
+          {
+            "name": "VIII",
+            "layout": "BSP"
+          }
+        ]
+      }
+    ]
+  }
+  
