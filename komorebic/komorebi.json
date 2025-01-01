@@ -28,11 +28,11 @@
       {
         "workspaces": [
           {
-            "name": "I",
+            "name": "1",
             "layout": "BSP"
           },
           {
-            "name": "II",
+            "name": "2",
             "layout": "BSP",
             "initial_workspace_rules": [{
                 "kind":"Exe",
@@ -40,7 +40,7 @@
             }]
           },
           {
-            "name": "III",
+            "name": "3",
             "layout": "BSP",
             "initial_workspace_rules": [{
                 "kind":"Exe",
@@ -48,23 +48,23 @@
             }]
           },
           {
-            "name": "IV",
+            "name": "4",
             "layout": "BSP"
           },
           {
-            "name": "V",
+            "name": "5",
             "layout": "BSP"
           },
           {
-            "name": "VI",
+            "name": "6",
             "layout": "BSP"
           },
           {
-            "name": "VII",
+            "name": "7",
             "layout": "BSP"
           },
           {
-            "name": "VIII",
+            "name": "8",
             "layout": "BSP"
           }
         ]
