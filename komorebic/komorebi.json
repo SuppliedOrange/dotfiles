@@ -24,6 +24,15 @@
         "width": 300
       }
     },
+    "transparency_ignore_rules": [{
+        "kind": "Title",
+        "id": "Terminal"
+    }],
+    "ignore_rules": [{
+        "kind": "Title",
+        "id": "WaitForMeKomorebi",
+        "matching_strategy": "Contains"
+    }],
     "monitors": [
       {
         "workspaces": [
