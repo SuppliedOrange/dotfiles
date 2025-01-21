@@ -24,15 +24,33 @@
         "width": 300
       }
     },
-    "transparency_ignore_rules": [{
+    "transparency_ignore_rules": [
+        {
         "kind": "Title",
         "id": "Terminal"
-    }],
-    "ignore_rules": [{
+        },
+        {
         "kind": "Title",
-        "id": "WaitForMeKomorebi",
-        "matching_strategy": "Contains"
-    }],
+        "id": "DesktopMate"
+        }
+    ],
+    "ignore_rules": [
+        {
+            "kind": "Title",
+            "id": "WaitForMeKomorebi",
+            "matching_strategy": "Contains"
+        },
+        {
+            "kind": "Title",
+            "id": "DesktopMate",
+            "matching_strategy": "Contains"
+        },
+        {
+            "kind": "Title",
+            "id": "Voice call",
+            "matching_strategy": "Contains"
+        }
+    ],
     "monitors": [
       {
         "workspaces": [
@@ -42,19 +60,11 @@
           },
           {
             "name": "2",
-            "layout": "BSP",
-            "initial_workspace_rules": [{
-                "kind":"Exe",
-                "id": "Brave.exe"
-            }]
+            "layout": "BSP"
           },
           {
             "name": "3",
-            "layout": "BSP",
-            "initial_workspace_rules": [{
-                "kind":"Exe",
-                "id": "Vesktop.exe"
-            }]
+            "layout": "BSP"
           },
           {
             "name": "4",
