@@ -87,7 +87,8 @@
         },
         {
             "Battery": {
-                "enable": true
+                "enable": true,
+                "hide_on_full_charge": true
             }
         }
     ]
