@@ -82,7 +82,8 @@
                 "show_total_data_transmitted": false,
                 "show_network_activity": true,
                 "show_default_interface": false,
-                "label_prefix":"IconAndText"
+                "label_prefix":"IconAndText",
+                "data_refresh_interval": 1
             }
         },
         {

@@ -85,6 +85,14 @@
           {
             "name": "8",
             "layout": "BSP"
+          },
+          {
+            "name": "9",
+            "layout": "BSP"
+          },
+          {
+            "name": "0",
+            "layout": "BSP"
           }
         ]
       }
