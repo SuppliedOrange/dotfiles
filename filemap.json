@@ -3,5 +3,10 @@
             "komorebi.bar.json": "C:/Users/Dhruv/komorebi.bar.json",
             "komorebi.json": "C:/Users/Dhruv/komorebi.json",
             "whkdrc": "C:/Users/Dhruv/.config/whkdrc"
+    },
+    "vesktop": {
+        "themes": {
+            "monokai-pro-yellow.theme.css": "C:/Users/Dhruv/AppData/Roaming/vesktop/themes/monokai-pro-yellow.theme.css"
+        }
     }
 }

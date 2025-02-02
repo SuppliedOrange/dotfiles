@@ -2,6 +2,8 @@
 
 Files that I use for configuration of software.
 
+Follow `filemap.json` to know where to put what files. They're currently localised to my system, but you can make out what yours would be.
+
 ## Komorebi
 
 + Install komorebi with scoop for windows. Follow their guide for the appropriate commands (there's 2 packages).
@@ -12,17 +14,15 @@ Files that I use for configuration of software.
 + My wallpaper is [lain_bliss](https://steamcommunity.com/sharedfiles/filedetails/?id=2686491283) by [deicha torar](https://steamcommunity.com/id/neveirissimo/) running on wallpaper engine. The video is available on [youtube](https://youtu.be/atMcPxyksGM) if you'd like to load it on your own animated wallpaper client.
 + Additionally, I use [komorebi-loader](https://github.com/SuppliedOrange/komorebi-loading) with this system but that's a completely optional reqirement.
 
-### File map
+### Preview
+![A preview of my system running komorebi](./komorebic/screenshot.png)
 
-[Path] Must have [Filenames]
 
-C:/Users/YourName/
+## Vesktop
 
-+ `komorebi.json` & `komorebi.bar.json`
-
-C:/Users/YourName/.config/
-
-+ `whkdrc`
++ Install [Vesktop](https://github.com/Vencord/Vesktop) from their github repo.
++ Open up the "themes" page in your Vesktop (Discord) settings and click on "Open Themes Folder". You can google how to do so if this changes in the future.
++ Put in your desired themes/plugins from the "vesktop" category in this repo.
 
 ### Preview
-![test](./komorebic/screenshot.png)
+![A preview of my vesktop discord client with a custom theme](./vesktop/screenshot.png)
