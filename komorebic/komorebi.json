@@ -1,5 +1,5 @@
 {
-    "$schema": "https://raw.githubusercontent.com/LGUG2Z/komorebi/v0.1.31/schema.json",
+    "$schema": "https://raw.githubusercontent.com/LGUG2Z/komorebi/v0.1.36/schema.json",
     "app_specific_configuration_path": "$Env:USERPROFILE/applications.json",
     "window_hiding_behaviour": "Cloak",
     "cross_monitor_move_behaviour": "Swap",
@@ -10,28 +10,31 @@
     "border_offset": -18,
     "transparency": true,
     "transparency_alpha": 215,
-    "animation": {"enabled":true, "duration":100},
+    "animation": {
+        "enabled": true,
+        "duration": 100
+    },
     "theme": {
-      "palette": "Base16",
-      "name": "Caroline",
-      "unfocused_border": "Base01",
-      "bar_accent": "Base08"
+        "palette": "Base16",
+        "name": "Caroline",
+        "unfocused_border": "Base01",
+        "bar_accent": "Base08"
     },
     "stackbar": {
-      "height": 40,
-      "mode": "OnStack",
-      "tabs": {
-        "width": 300
-      }
+        "height": 40,
+        "mode": "OnStack",
+        "tabs": {
+            "width": 300
+        }
     },
     "transparency_ignore_rules": [
         {
-        "kind": "Title",
-        "id": "Terminal"
+            "kind": "Title",
+            "id": "Terminal"
         },
         {
-        "kind": "Title",
-        "id": "DesktopMate"
+            "kind": "Title",
+            "id": "DesktopMate"
         }
     ],
     "ignore_rules": [
@@ -49,53 +52,61 @@
             "kind": "Title",
             "id": "Voice call",
             "matching_strategy": "Contains"
+        },
+        {
+            "kind": "Title",
+            "id": ".ahk",
+            "matching_strategy": "Contains"
         }
     ],
     "monitors": [
-      {
-        "workspaces": [
-          {
-            "name": "1",
-            "layout": "BSP"
-          },
-          {
-            "name": "2",
-            "layout": "BSP"
-          },
-          {
-            "name": "3",
-            "layout": "BSP"
-          },
-          {
-            "name": "4",
-            "layout": "BSP"
-          },
-          {
-            "name": "5",
-            "layout": "BSP"
-          },
-          {
-            "name": "6",
-            "layout": "BSP"
-          },
-          {
-            "name": "7",
-            "layout": "BSP"
-          },
-          {
-            "name": "8",
-            "layout": "BSP"
-          },
-          {
-            "name": "9",
-            "layout": "BSP"
-          },
-          {
-            "name": "0",
-            "layout": "BSP"
-          }
-        ]
-      }
+        {
+            "wallpaper": {
+                "generate_theme": false,
+                "path": "C://Users/Dhruv/Documents/your wallpaper.png"
+            },
+            "workspaces": [
+                {
+                    "name": "1",
+                    "layout": "BSP"
+                },
+                {
+                    "name": "2",
+                    "layout": "BSP"
+                },
+                {
+                    "name": "3",
+                    "layout": "BSP"
+                },
+                {
+                    "name": "4",
+                    "layout": "BSP"
+                },
+                {
+                    "name": "5",
+                    "layout": "BSP"
+                },
+                {
+                    "name": "6",
+                    "layout": "BSP"
+                },
+                {
+                    "name": "7",
+                    "layout": "BSP"
+                },
+                {
+                    "name": "8",
+                    "layout": "BSP"
+                },
+                {
+                    "name": "9",
+                    "layout": "BSP"
+                },
+                {
+                    "name": "0",
+                    "layout": "BSP"
+                }
+            ]
+        }
     ]
-  }
-  
+}
