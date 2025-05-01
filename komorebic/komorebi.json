@@ -1,5 +1,5 @@
 {
-    "$schema": "https://raw.githubusercontent.com/LGUG2Z/komorebi/v0.1.36/schema.json",
+    "$schema": "https://raw.githubusercontent.com/LGUG2Z/komorebi/refs/heads/master/schema.json",
     "app_specific_configuration_path": "$Env:USERPROFILE/applications.json",
     "window_hiding_behaviour": "Cloak",
     "cross_monitor_move_behaviour": "Swap",
@@ -12,7 +12,8 @@
     "transparency_alpha": 215,
     "animation": {
         "enabled": true,
-        "duration": 100
+        "duration": 150,
+        "style": "EaseInOutSine"
     },
     "theme": {
         "palette": "Base16",
