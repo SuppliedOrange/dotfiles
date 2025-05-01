@@ -4,6 +4,8 @@ Files that I use for configuration of software.
 
 Follow `filemap.json` to know where to put what files. They're currently localised to my system, but you can make out what yours would be.
 
+Run `.\sync_files.bat` to automatically sync all files from filemap.
+
 ## Komorebi
 
 + Install komorebi with scoop for windows. Follow their guide for the appropriate commands (there's 2 packages).
