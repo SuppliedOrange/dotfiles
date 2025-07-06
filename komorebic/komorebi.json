@@ -10,6 +10,7 @@
     "border_offset": -18,
     "transparency": true,
     "transparency_alpha": 215,
+    "window_handling_behaviour": "Async",
     "animation": {
         "enabled": true,
         "duration": 150,
