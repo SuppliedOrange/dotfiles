@@ -58,6 +58,11 @@
             "kind": "Title",
             "id": ".ahk",
             "matching_strategy": "Contains"
+        },
+        {
+            "kind": "Title",
+            "id": "Grand Theft Auto V",
+            "matching_strategy": "Contains"
         }
     ],
     "monitors": [

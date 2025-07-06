@@ -2,7 +2,8 @@
     "komorebic": {
             "komorebi.bar.json": "C:/Users/Dhruv/komorebi.bar.json",
             "komorebi.json": "C:/Users/Dhruv/komorebi.json",
-            "whkdrc": "C:/Users/Dhruv/.config/whkdrc"
+            "whkdrc": "C:/Users/Dhruv/.config/whkdrc",
+            "config.json": "C:/Users/Dhruv/AppData/Roaming/komorebi-loading/config.json"
     },
     "vesktop": {
         "themes": {
