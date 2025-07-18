@@ -4,7 +4,49 @@ Files that I use for configuration of software.
 
 Follow `filemap.json` to know where to put what files. They're currently localised to my system, but you can make out what yours would be.
 
-Run `.\sync_files.bat` to automatically sync all files from filemap.
+## Sync Scripts
+
++ Run `.\sync_files.ps1` to automatically sync all files from filemap.
++ Run `.\auto_sync_and_pr.ps1 -Run` to sync files and automatically create a pull request if changes are detected.
+
+### Auto Sync and PR Script
+
+Automatically syncs your scripts and opens a PR if things have changed. **Requires either -Run or -DryRun flag to run (mutually exclusive).**
+
+**Usage:**
+
+```powershell
+# Dry run (shows what would happen without making changes)
+.\auto_sync_and_pr.ps1 -DryRun
+.\auto_sync_and_pr.ps1 -dr
+
+# Run the script and make changes
+.\auto_sync_and_pr.ps1 -Run
+.\auto_sync_and_pr.ps1 -r
+
+# Custom branch prefix and commit message with aliases
+.\auto_sync_and_pr.ps1 -r -b "config-update" -c "Updated system configs"
+
+# Show help
+.\auto_sync_and_pr.ps1 -Help
+.\auto_sync_and_pr.ps1 -h
+```
+
+**Parameter Aliases:**
+
++ `-Run` or `-r`: Run the script and make actual changes
++ `-DryRun` or `-dr`: Dry run mode (mutually exclusive with -Run)
++ `-BranchPrefix` or `-b`: Custom branch prefix
++ `-CommitMessage` or `-c`: Custom commit message
++ `-Help` or `-h`: Show help message
+
+> This automatically creates a PR on changes just so you know!
+
+**Requirements:**
+
++ Github CLI `gh`
++ Git `git`
++ Python (3.x) `python`
 
 ## Komorebi
 
@@ -17,8 +59,8 @@ Run `.\sync_files.bat` to automatically sync all files from filemap.
 + Additionally, I use [komorebi-loader](https://github.com/SuppliedOrange/komorebi-loading) with this system but that's a completely optional reqirement.
 
 ### Preview
-![A preview of my system running komorebi](./komorebic/screenshot.png)
 
+![A preview of my system running komorebi](./komorebic/screenshot.png)
 
 ## Vesktop
 
@@ -27,4 +69,5 @@ Run `.\sync_files.bat` to automatically sync all files from filemap.
 + Put in your desired themes/plugins from the "vesktop" category in this repo.
 
 ### Preview
+
 ![A preview of my vesktop discord client with a custom theme](./vesktop/screenshot.png)

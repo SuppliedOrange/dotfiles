@@ -66,6 +66,13 @@
             "matching_strategy": "Contains"
         }
     ],
+    "manage_rules": [
+        {
+            "kind": "Title",
+            "id": "VTube Studio",
+            "matching_strategy": "Contains"
+        }
+    ],
     "monitors": [
         {
             "wallpaper": {
