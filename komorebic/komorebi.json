@@ -64,6 +64,11 @@
             "kind": "Title",
             "id": "Grand Theft Auto V",
             "matching_strategy": "Contains"
+        },
+        {
+            "kind": "Title",
+            "id": "TLauncher",
+            "matching_strategy": "Contains"
         }
     ],
     "manage_rules": [
