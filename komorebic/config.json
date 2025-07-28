@@ -1,4 +1,15 @@
 {
     "name": "Doog",
-    "welcome_message": "Bienvenue"
+    "welcome_message": "Bienvenue",
+    "launch_options": {
+        "bar": true,
+        "whkd": true,
+        "masir": true,
+        "clean_state": false,
+        "await_configuration": false,
+        "tcp_port": null,
+        "config_file_path": null
+    },
+    "custom_args": [],
+    "skipTaskbar": false
 }
