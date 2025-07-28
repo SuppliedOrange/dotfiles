@@ -5,16 +5,16 @@
 param(
     [Alias("b")]
     [string]$BranchPrefix = "auto-sync",
-    
+   
     [Alias("c")]
     [string]$CommitMessage = "Auto-sync dotfiles",
-    
+   
     [Alias("dr")]
     [switch]$DryRun,
-    
+   
     [Alias("r")]
     [switch]$Run,
-    
+   
     [Alias("h")]
     [switch]$Help
 )
@@ -55,7 +55,7 @@ These requirements will be installed if missing:
 # Function to check and install requirements
 function Install-Requirements {
     Write-Log "Checking and installing requirements..."
-    
+   
     # Check Python
     try {
         $null = python --version
@@ -73,7 +73,7 @@ function Install-Requirements {
             throw "Python installation failed"
         }
     }
-    
+   
     # Check Git
     try {
         $null = git --version
@@ -91,7 +91,7 @@ function Install-Requirements {
             throw "Git installation failed"
         }
     }
-    
+   
     # Check GitHub CLI
     try {
         $null = gh --version
@@ -109,7 +109,7 @@ function Install-Requirements {
             throw "GitHub CLI installation failed"
         }
     }
-    
+   
     Write-Log "All requirements checked/installed"
 }
 
@@ -123,27 +123,64 @@ function Write-Log {
 # Function to check for existing PR
 function Get-ExistingPR {
     param([string]$BranchPrefix)
-    
+   
     try {
         # Check if GitHub CLI is authenticated
         if (-not (Test-GitHubAuth)) {
             Write-Log "GitHub CLI not authenticated. Cannot check for existing PRs." -Level "WARNING"
             return $null
         }
+       
+        Write-Log "Checking for existing PRs with prefix: $BranchPrefix" -Level "INFO"
         
-        # Get list of open PRs with auto-sync prefix
-        $prs = gh pr list --state open --json number,headRefName,title --jq ".[] | select(.headRefName | startswith(`"$BranchPrefix`"))"
+        # Get list of open PRs and filter for auto-sync branches
+        $prs = gh pr list --state open --json number,headRefName,title 2>&1
         
-        if ($prs) {
-            # Parse the JSON to get the most recent PR
-            $prData = $prs | ConvertFrom-Json | Sort-Object number -Descending | Select-Object -First 1
-            return @{
-                Number = $prData.number
-                Branch = $prData.headRefName
-                Title = $prData.title
-            }
+        if ($LASTEXITCODE -ne 0) {
+            Write-Log "Failed to get PR list from GitHub CLI: $prs" -Level "WARNING"
+            return $null
         }
-        return $null
+        
+        Write-Log "Raw PR data received: $prs" -Level "INFO"
+        
+        if (-not $prs -or $prs.Trim() -eq '' -or $prs.Trim() -eq '[]') {
+            Write-Log "No open PRs found" -Level "INFO"
+            return $null
+        }
+        
+        # Parse JSON and filter for matching branch prefix
+        try {
+            $prList = $prs | ConvertFrom-Json
+            Write-Log "Parsed $($prList.Count) total PRs" -Level "INFO"
+            
+            # Log all PR branches for debugging
+            foreach ($pr in $prList) {
+                Write-Log "Found PR #$($pr.number): branch '$($pr.headRefName)'" -Level "INFO"
+            }
+            
+            $matchingPRs = $prList | Where-Object { $_.headRefName -like "$BranchPrefix*" }
+            Write-Log "Found $($matchingPRs.Count) PRs matching prefix '$BranchPrefix*'" -Level "INFO"
+            
+            if ($matchingPRs) {
+                # Get the most recent PR (highest number)
+                $latestPR = $matchingPRs | Sort-Object number -Descending | Select-Object -First 1
+                Write-Log "Selected existing PR #$($latestPR.number) on branch $($latestPR.headRefName)" -Level "INFO"
+                
+                return @{
+                    Number = $latestPR.number
+                    Branch = $latestPR.headRefName
+                    Title = $latestPR.title
+                }
+            } else {
+                Write-Log "No PRs found with prefix '$BranchPrefix*'" -Level "INFO"
+                return $null
+            }
+        } catch {
+            Write-Log "Failed to parse PR JSON: $($_.Exception.Message)" -Level "WARNING"
+            Write-Log "Raw data was: $prs" -Level "WARNING"
+            return $null
+        }
+        
     } catch {
         Write-Log "Could not check for existing PRs: $($_.Exception.Message)" -Level "WARNING"
         return $null
@@ -168,7 +205,7 @@ function Request-GitHubAuth {
     Write-Log "  1. Run: gh auth login" -Level "INFO"
     Write-Log "  2. Set GH_TOKEN environment variable with a GitHub API token" -Level "INFO"
     Write-Log "  3. Use -DryRun mode to test without authentication" -Level "INFO"
-    
+   
     $response = Read-Host "Would you like to run 'gh auth login' now? (y/N)"
     if ($response -eq 'y' -or $response -eq 'Y') {
         try {
@@ -191,26 +228,26 @@ function Request-GitHubAuth {
 # Function to cleanup failed branch
 function Remove-FailedBranch {
     param([string]$BranchName)
-    
+   
     try {
         Write-Log "Cleaning up failed branch: $BranchName" -Level "WARNING"
-        
+       
         # Switch back to main if we're still on the failed branch
         $currentBranch = git branch --show-current
         if ($currentBranch -eq $BranchName) {
             git checkout main
         }
-        
+       
         # Delete local branch
         git branch -D $BranchName
-        
+       
         # Delete remote branch if it exists
         $remoteBranch = git ls-remote --heads origin $BranchName
         if ($remoteBranch) {
             Write-Log "Deleting remote branch: $BranchName" -Level "WARNING"
             git push origin --delete $BranchName
         }
-        
+       
         Write-Log "Branch cleanup completed" -Level "INFO"
     } catch {
         Write-Log "Failed to cleanup branch: $($_.Exception.Message)" -Level "ERROR"
@@ -220,21 +257,30 @@ function Remove-FailedBranch {
 # Function to check if current changes differ from PR branch
 function Test-ChangesDifferFromPR {
     param([string]$PrBranch)
-    
+   
     try {
-        # Fetch the latest changes
-        git fetch origin $PrBranch
+        Write-Log "Comparing current changes with PR branch: $PrBranch" -Level "INFO"
         
+        # Fetch the latest changes
+        git fetch origin $PrBranch 2>$null
+        if ($LASTEXITCODE -ne 0) {
+            Write-Log "Could not fetch PR branch, assuming changes are different" -Level "WARNING"
+            return $true
+        }
+       
         # Stage current changes temporarily
         git add .
-        
+       
         # Compare with the PR branch
         $diff = git diff --cached origin/$PrBranch
-        
+       
         # Unstage the changes
         git reset
+       
+        $hasDifferences = -not [string]::IsNullOrWhiteSpace($diff)
+        Write-Log "Changes differ from PR branch: $hasDifferences" -Level "INFO"
         
-        return -not [string]::IsNullOrWhiteSpace($diff)
+        return $hasDifferences
     } catch {
         Write-Log "Could not compare changes with PR branch: $($_.Exception.Message)" -Level "WARNING"
         return $true  # Assume there are differences if we can't compare
@@ -287,7 +333,7 @@ try {
 
     # Step 1: Run sync_files.py
     Write-Log "Running sync_files.py..."
-    
+   
     if ($DryRun) {
         Write-Log "DRY RUN: Would execute: python sync_files.py" -Level "INFO"
     } else {
@@ -300,7 +346,7 @@ try {
 
     # Step 2: Check if there are any changes
     Write-Log "Checking for git changes..."
-    
+   
     $gitStatus = git status --porcelain
     if (-not $gitStatus) {
         Write-Log "No changes detected. Exiting." -Level "INFO"
@@ -312,14 +358,14 @@ try {
 
     # Step 3: Check for existing PR
     $existingPR = Get-ExistingPR -BranchPrefix $BranchPrefix
-    
+   
     if ($existingPR) {
         Write-Log "Found existing PR #$($existingPR.Number) on branch $($existingPR.Branch)"
-        
+       
         # Check if current changes are different from the existing PR
         if (Test-ChangesDifferFromPR -PrBranch $existingPR.Branch) {
             Write-Log "Current changes differ from existing PR. Updating PR..." -Level "INFO"
-            
+           
             # Switch to existing branch and update it
             if ($DryRun) {
                 Write-Log "DRY RUN: Would checkout branch $($existingPR.Branch) and update it" -Level "INFO"
@@ -329,33 +375,35 @@ try {
                     Write-Log "GitHub CLI authentication lost. Cannot update PR." -Level "ERROR"
                     throw "GitHub CLI authentication required"
                 }
-                
+               
                 git checkout $existingPR.Branch
                 git pull origin $existingPR.Branch
                 git add .
-                
+               
                 $timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
                 git commit -m "$CommitMessage - Updated $timestamp"
                 git push origin $existingPR.Branch
-                
+               
                 # Update PR description
                 $prBody = @"
 This is an automated pull request created by the auto-sync script.
 
 ## Changes
+
 This PR contains the latest synced dotfiles from the local system.
 
 ## Files Changed
-``````
+
+```
 $($gitStatus)
-``````
+```
 
 Last updated: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
 "@
                 gh pr edit $existingPR.Number --body $prBody
                 if ($LASTEXITCODE -eq 0) {
                     Write-Log "Updated existing PR #$($existingPR.Number)"
-                    
+                   
                     # Get the PR URL
                     $prUrl = gh pr view $existingPR.Number --json url --jq .url
                     if ($prUrl) {
@@ -372,13 +420,13 @@ Last updated: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
     } else {
         # No existing PR, create a new one
         Write-Log "No existing PR found. Creating new PR..."
-        
+       
         # Create a new branch with timestamp
         $timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
         $branchName = "$BranchPrefix-$timestamp"
-        
+       
         Write-Log "Creating new branch: $branchName"
-        
+       
         if ($DryRun) {
             Write-Log "DRY RUN: Would create branch $branchName" -Level "INFO"
         } else {
@@ -390,7 +438,7 @@ Last updated: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
 
         # Stage and commit changes
         Write-Log "Staging and committing changes..."
-        
+       
         if ($DryRun) {
             Write-Log "DRY RUN: Would stage all changes and commit with message: $CommitMessage" -Level "INFO"
         } else {
@@ -403,7 +451,7 @@ Last updated: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
 
         # Push to origin
         Write-Log "Pushing branch to origin..."
-        
+       
         if ($DryRun) {
             Write-Log "DRY RUN: Would push branch $branchName to origin" -Level "INFO"
         } else {
@@ -415,18 +463,20 @@ Last updated: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
 
         # Create PR using GitHub CLI
         Write-Log "Creating pull request using GitHub CLI..."
-        
+       
         $prTitle = "Auto-sync dotfiles - $timestamp"
         $prBody = @"
 This is an automated pull request created by the auto-sync script.
 
 ## Changes
+
 This PR contains the latest synced dotfiles from the local system.
 
 ## Files Changed
-``````
+
+```
 $($gitStatus)
-``````
+```
 
 Generated on: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
 "@
@@ -440,11 +490,11 @@ Generated on: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
                 Remove-FailedBranch -BranchName $branchName
                 throw "GitHub CLI authentication required"
             }
-            
+           
             gh pr create --title $prTitle --body $prBody --base main --head $branchName
             if ($LASTEXITCODE -eq 0) {
                 Write-Log "Pull request created successfully!"
-                
+               
                 # Get the PR URL
                 $prUrl = gh pr view $branchName --json url --jq .url
                 if ($prUrl) {
@@ -468,7 +518,7 @@ Generated on: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
 
 } catch {
     Write-Log "Error: $($_.Exception.Message)" -Level "ERROR"
-    
+   
     # Try to return to main branch on error
     try {
         if (-not $DryRun) {
@@ -477,6 +527,6 @@ Generated on: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
     } catch {
         Write-Log "Failed to return to main branch: $($_.Exception.Message)" -Level "ERROR"
     }
-    
+   
     exit 1
 }
